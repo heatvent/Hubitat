@@ -25,21 +25,21 @@ import groovy.transform.Field
 
 @Field static Map commandClassVersions = 
     [
-//         0x25: 2 //1    //Switch Binary        //SWITCH
+//       0x25: 2 //1    //Switch Binary        //SWITCH
          0x26: 4 //3    //switchMultiLevel    //DIMMER
         ,0x70: 4 //2    //configuration
-        ,0x72: 2    //Manufacturer Specific
-        ,0x85: 2    //association
-	    ,0x86: 3    //Version
+        ,0x72: 2    	//Manufacturer Specific
+        ,0x85: 2    	//Association
+	,0x86: 3    	//Version
 ]
 
 metadata {
 	definition (name: "GE Enbrighten ZWA3016/59383 Z-Wave Plus Dimmer", namespace: "Heatvent", author: "MCP") {
 		capability "Actuator"
-        capability "DoubleTapableButton"
-        capability "HoldableButton"
+        	capability "DoubleTapableButton"
+        	capability "HoldableButton"
 		capability "PushableButton"
-        capability "ReleasableButton"
+        	capability "ReleasableButton"
 		capability "Configuration"
 		capability "Refresh"
 		capability "Sensor"
@@ -64,11 +64,11 @@ metadata {
  preferences {
         input name: "paramLED", type: "enum", title: "(3) LED Indicator Behavior", multiple: false, options: ["0" : "LED ON When Switch OFF (default)", "1" : "LED ON When Switch ON", "2" : "LED Always OFF", "3" : "LED Always ON"], required: false, displayDuringSetup: true, defaultValue: "0"
         input name: "paramInverted", type: "enum", title: "(4) Switch Buttons Direction", multiple: false, options: ["0" : "Normal (default)", "1" : "Inverted"], required: false, displayDuringSetup: true, defaultValue: "0"
-		input name: "paramThreeWayType", type: "enum", title: "(5) 3-Way Add-On Switch", multiple: false, options: ["0" : "Off (default)", "1" : "On"], required: false, displayDuringSetup: true, defaultValue: "0"
+	input name: "paramThreeWayType", type: "enum", title: "(5) 3-Way Add-On Switch", multiple: false, options: ["0" : "Off (default)", "1" : "On"], required: false, displayDuringSetup: true, defaultValue: "0"
         input name: "paramUpDownRate", type: "enum", title: "(6) Adjust the speed at which the dimmer ramps to a specific value", multiple: false, options: ["0" : "Fast (default)", "1" : "Slow"], required: false, displayDuringSetup: true, defaultValue: "0" //DIMMER
         input name: "paramSwitchMode", type: "enum", title: "(16) Turn your dimmer into an On/Off switch", multiple: false, options: ["0" : "OFF (default)", "1" : "ON"], required: false, displayDuringSetup: true, defaultValue: "0" //DIMMER
-		input name: "paramAlternateExclusion", type: "enum", title: "(19) Enable alternate exclusion (2-ON, 2-OFF)", multiple: false, options: ["0" : "OFF (default)", "1" : "ON"], required: false, displayDuringSetup: true, defaultValue: "0"
-		input name: "paramMinDim", type: "number", title: "(30) Minimum Dim Threshold (1-99%)", multiple: false, range: "1..99", required: false, displayDuringSetup: true, defaultValue: "1" //DIMMER
+	input name: "paramAlternateExclusion", type: "enum", title: "(19) Enable alternate exclusion (2-ON, 2-OFF)", multiple: false, options: ["0" : "OFF (default)", "1" : "ON"], required: false, displayDuringSetup: true, defaultValue: "0"
+	input name: "paramMinDim", type: "number", title: "(30) Minimum Dim Threshold (1-99%)", multiple: false, range: "1..99", required: false, displayDuringSetup: true, defaultValue: "1" //DIMMER
         input name: "paramMaxDim", type: "number", title: "(31) Maximum Dim Threshold (1-99%)", multiple: false, range: "1..99", required: false, displayDuringSetup: true, defaultValue: "99" //DIMMER
         input name: "paramDefaultDim", type: "number", title: "(32) Default ON % (Default=0=Last %)", multiple: false, range: "0..99", required: false, displayDuringSetup: true, defaultValue: "0"
         input name: "paramLEDColor", type: "enum", title: "(34) LED Light Color", multiple: false, options: ["1" : "Red", "2" : "Orange", "3" : "Yellow", "4" : "Green", "5" : "Blue (default)", "6" : "Pink", "7" : "Purple", "8" : "White"], required: false, displayDuringSetup: true, defaultValue: "5"
@@ -77,7 +77,7 @@ metadata {
         input name: "requestedGroup2", type: "text", title: "Association Group 2 Members (Max of 5):", required: false
         input name: "requestedGroup3", type: "text", title: "Association Group 3 Members (Max of 4):", required: false
         input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: false
-	    input name: "logDesc", type: "bool", title: "Enable descriptionText logging", defaultValue: true
+	input name: "logDesc", type: "bool", title: "Enable descriptionText logging", defaultValue: true
     }
 }
 
@@ -112,10 +112,10 @@ void zwaveEvent(hubitat.zwave.commands.supervisionv1.SupervisionGet cmd){
     sendHubCommand(new hubitat.device.HubAction(secure(zwave.supervisionV1.supervisionReport(sessionID: cmd.sessionID, reserved: 0, moreStatusUpdates: false, status: 0xFF, duration: 0)), hubitat.device.Protocol.ZWAVE))
 }
 
-//def zwaveEvent(hubitat.zwave.commands.basicv1.BasicReport cmd) {
-//    if (logEnable) log.debug "---BASIC REPORT V1--- ${device.displayName} sent ${cmd}"
-//	if (logEnable) log.debug "This report does nothing in this driver, and shouldn't have been called..."
-//}
+def zwaveEvent(hubitat.zwave.commands.basicv1.BasicReport cmd) {
+    if (logEnable) log.debug "---BASIC REPORT V1--- ${device.displayName} sent ${cmd}"
+	if (logEnable) log.debug "This report does nothing in this driver, and shouldn't have been called..."
+}
 
 def zwaveEvent(hubitat.zwave.commands.basicv2.BasicSet cmd) {
     if (logEnable) log.debug "---BASIC SET V2--- ${device.displayName} sent ${cmd}"
@@ -451,20 +451,20 @@ def updated() {
 	def cmds = []
     
 	// Associations    
-    cmds << secure(zwave.associationV2.associationSet(groupingIdentifier:1, nodeId:zwaveHubNodeId).format())
+    	cmds << secure(zwave.associationV2.associationSet(groupingIdentifier:1, nodeId:zwaveHubNodeId).format())
 
 	def nodes = []
 	nodes = parseAssocGroupList(settings.requestedGroup2, 2)
-    cmds << secure(zwave.associationV4.associationRemove(groupingIdentifier: 2, nodeId: []).format())
-    cmds << secure(zwave.associationV4.associationSet(groupingIdentifier: 2, nodeId: nodes).format())
-    cmds << secure(zwave.associationV4.associationGet(groupingIdentifier: 2).format())
-    state.currentGroup2 = settings.requestedGroup2
+    	cmds << secure(zwave.associationV4.associationRemove(groupingIdentifier: 2, nodeId: []).format())
+    	cmds << secure(zwave.associationV4.associationSet(groupingIdentifier: 2, nodeId: nodes).format())
+    	cmds << secure(zwave.associationV4.associationGet(groupingIdentifier: 2).format())
+    	state.currentGroup2 = settings.requestedGroup2
 	
    	nodes = parseAssocGroupList(settings.requestedGroup3, 3)
-    cmds << secure(zwave.associationV4.associationRemove(groupingIdentifier: 3, nodeId: []).format())
-    cmds << secure(zwave.associationV4.associationSet(groupingIdentifier: 3, nodeId: nodes).format())
-    cmds << secure(zwave.associationV4.associationGet(groupingIdentifier: 3).format())
-    state.currentGroup3 = settings.requestedGroup3
+    	cmds << secure(zwave.associationV4.associationRemove(groupingIdentifier: 3, nodeId: []).format())
+    	cmds << secure(zwave.associationV4.associationSet(groupingIdentifier: 3, nodeId: nodes).format())
+    	cmds << secure(zwave.associationV4.associationGet(groupingIdentifier: 3).format())
+    	state.currentGroup3 = settings.requestedGroup3
 	
 	// Set LED param
 	if (paramLED==null) {
@@ -480,7 +480,7 @@ def updated() {
 	cmds << secure(zwave.configurationV4.configurationSet(scaledConfigurationValue: paramInverted.toInteger(), parameterNumber: 4, size: 1).format())
 	cmds << secure(zwave.configurationV4.configurationGet(parameterNumber: 4).format())
     
-    // Set 3-Way param
+    	// Set 3-Way param
 	if (paramThreeWayType==null) {
 		paramThreeWayType = 0
 	}
@@ -508,7 +508,7 @@ def updated() {
 	cmds << secure(zwave.configurationV4.configurationSet(scaledConfigurationValue: paramAlternateExclusion.toInteger(), parameterNumber: 19, size: 1).format())
 	cmds << secure(zwave.configurationV4.configurationGet(parameterNumber: 19).format())
 	
-    // Comment out for now, as it is unclear how/if this actually works
+    	// Comment out for now, as it is unclear how/if this actually works
    	// Set Minimum Dim %                //DIMMER
 	if (paramMinDim==null) {
 		paramMinDim = 1
@@ -522,7 +522,7 @@ def updated() {
 	}	
 	cmds << zwave.configurationV4.configurationSet(scaledConfigurationValue: paramMaxDim.toInteger(), parameterNumber: 31, size: 1).format()
 	cmds << zwave.configurationV4.configurationGet(parameterNumber: 31).format()
-    // END
+    	// END
     
    	// Set Default Dim %                //DIMMER
 	if (paramDefaultDim==null) {
@@ -531,21 +531,21 @@ def updated() {
 	cmds << secure(zwave.configurationV4.configurationSet(scaledConfigurationValue: paramDefaultDim.toInteger(), parameterNumber: 32, size: 1).format())
 	cmds << secure(zwave.configurationV4.configurationGet(parameterNumber: 32).format())
     
-    // Set LED Color
+    	// Set LED Color
 	if (paramLEDColor==null) {
 		paramLEDColor = 0
 	}	
 	cmds << secure(zwave.configurationV4.configurationSet(scaledConfigurationValue: paramLEDColor.toInteger(), parameterNumber: 34, size: 1).format())
 	cmds << secure(zwave.configurationV4.configurationGet(parameterNumber: 34).format())
 	
-    // Set Intensity
+    	// Set Intensity
 	if (paramIntensity==null) {
 		paramIntensity = 0
 	}	
 	cmds << secure(zwave.configurationV4.configurationSet(scaledConfigurationValue: paramIntensity.toInteger(), parameterNumber: 35, size: 1).format())
 	cmds << secure(zwave.configurationV4.configurationGet(parameterNumber: 35).format())
 	
-    // Set Guidelight Intensity
+    	// Set Guidelight Intensity
 	if (paramGuidelightIntensity==null) {
 		paramGuidelightIntensity = 0
 	}	
